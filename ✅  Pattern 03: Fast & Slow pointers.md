@@ -27,42 +27,25 @@ All other distances between the fast and <i>slow pointers</i> will reduce to one
 
 This concludes that the two pointers will definitely meet if the <b>LinkedList</b> has a cycle. 
 
-````js
-class Node {
-  constructor(value, next = null) {
-    this.value = value;
-    this.next = next
-  }
-}
+````cpp
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
 
-function hasCycle(head) {
-  let slow = head
-  let fast = head
-  while(fast !== null && fast.next !== null) {
-    fast = fast.next.next;
-    slow = slow.next
-    
-    if(slow === fast) {
-      //found the cycle
-      return true
+        while(head && slow->next && fast->next && fast->next->next){
+            slow=slow->next;
+            fast=fast->next->next;
+            if(slow==fast){
+                return true;
+            }
+
+        }
+        return false;
+
     }
-  }
-  return false
-}
-
-head = new Node(1)
-head.next = new Node(2)
-head.next.next = new Node(3)
-head.next.next.next = new Node(4)
-head.next.next.next.next = new Node(5)
-head.next.next.next.next.next = new Node(6)
-console.log(`LinkedList has cycle: ${hasCycle(head)}`)
-
-head.next.next.next.next.next.next = head.next.next
-console.log(`LinkedList has cycle: ${hasCycle(head)}`)
-
-head.next.next.next.next.next.next = head.next.next.next
-console.log(`LinkedList has cycle: ${hasCycle(head)}`)
+};
 ````
 
 - Once the <i>slow pointer</i> enters the cycle, the <i>fast pointer</i> will meet the <i><i>slow pointer</i></i> in the same loop. Therefore, the time complexity of our algorithm will be `O(N)` where `N` is the total number of nodes in the <b>LinkedList</b>.
