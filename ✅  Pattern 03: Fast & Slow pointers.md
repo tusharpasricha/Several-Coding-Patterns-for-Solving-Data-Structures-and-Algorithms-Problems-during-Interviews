@@ -301,38 +301,22 @@ One brute force strategy could be to first count the number of nodes in the <b>L
 
 We can use the <b>Fast & Slow</b> pointers method such that the <i>fast pointer</i> is always twice the nodes ahead of the <i>slow pointer</i>. This way, when the <i>fast pointer</i> reaches the end of the <b>LinkedList</b>, the <i>slow pointer</i> will be pointing at the middle node.
 
-````js
-class Node {
-  constructor(value, next = null) {
-    this.value = value
-    this.next = next
-  }
-}
+````cpp
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
 
-function findMiddleOfLinkedList(head) {
-  let slow = head
-  let fast = head
-  
-  while(fast !== null && fast.next !== null) {
-    slow = slow.next
-    fast = fast.next.next
-  }
-  return slow
-}
+        while(fast && fast->next){
+            slow=slow->next;
+            fast=fast->next->next;
 
-head = new Node(1)
-head.next = new Node(2)
-head.next.next = new Node(3)
-head.next.next.next = new Node(4)
-head.next.next.next.next = new Node(5)
+        }
+        return slow;
+    }
+};
 
-console.log(`Middle Node: ${findMiddleOfLinkedList(head).value}`)
-
-head.next.next.next.next.next = new Node(6)
-console.log(`Middle Node: ${findMiddleOfLinkedList(head).value}`)
-
-head.next.next.next.next.next.next = new Node(7)
-console.log(`Middle Node: ${findMiddleOfLinkedList(head).value}`)
 ````
 - The above algorithm will have a time complexity of `O(N)` where `N` is the number of nodes in the <b>LinkedList</b>.
 - The algorithm runs in constant space `O(1)`.
