@@ -28,102 +28,29 @@ The diagram above clearly shows a merging approach. Our algorithm will look like
 ````
 We will keep repeating the above two steps to merge `c` with the next interval if it overlaps with `c`.
 
-````js
-class Interval {
-  constructor(start, end) {
-    this.start = start;
-    this.end = end;
-  }
+````cpp
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        vector<vector<int>>ans;
+        int n = intervals.size();
+        sort(intervals.begin(),intervals.end());
+        ans.push_back(intervals[0]);
+        for(int i = 1;i<n;i++){
+            vector<int>temp = ans.back();
 
-  get_interval() {
-    return "[" + this.start + ", " + this.end + "]";
-  }
-}
+            if( temp[1] >= intervals[i][0] ){
+                ans.pop_back();
+                ans.push_back({temp[0],max(intervals[i][1],temp[1])});
+            }
+            else{
+                 ans.push_back(intervals[i]);
+            }
+        }
+        return ans;
 
-function merge (intervals) {
-  if(intervals.length < 2) {
-    return intervals
-  }
-  
-  //sort the intervals on the startTime
-  intervals.sort((a,b) => a.start - b.start)
-  const mergedIntervals = []
-  
-  let start = intervals[0].start
-  let end = intervals[0].end
-  
-  for(let i = 1; i < intervals.length; i++) {
-    const interval = intervals[i]
-    if(interval.start <= end) {
-      //overlapping intervals, adjust the end
-      end = Math.max(interval.end, end)    
-    } else {
-      //non-overlapping intercal, add the precious interval and reset
-      mergedIntervals.push(new Interval(start, end))
-      start = interval.start
-      end = interval.end
     }
-  }
-  //add the last interval
-  mergedIntervals.push(new Interval(start, end))
-  return mergedIntervals;
 };
-
-merged_intervals = merge([new Interval(1, 4), new Interval(2, 5), new Interval(7, 9)]);
-result = "";
-for(i=0; i < merged_intervals.length; i++) {
-  result += merged_intervals[i].get_interval() + " ";
-}
-console.log(`Merged intervals: ${result}`)
-//Output: [[1,5], [7,9]]
-//Explanation: Since the first two intervals [1,4] and [2,5] overlap, we merged them into one [1,5].
-
-
-merged_intervals = merge([new Interval(6, 7), new Interval(2, 4), new Interval(5, 9)]);
-result = "";
-for(i=0; i < merged_intervals.length; i++) {
-  result += merged_intervals[i].get_interval() + " ";
-}
-console.log(`Merged intervals: ${result}`)
-//Output: [[2,4], [5,9]]
-//Explanation: Since the intervals [6,7] and [5,9] overlap, we merged them into one [5,9].
-
-
-merged_intervals = merge([new Interval(1, 4), new Interval(2, 6), new Interval(3, 5)]);
-result = "";
-for(i=0; i < merged_intervals.length; i++) {
-  result += merged_intervals[i].get_interval() + " ";
-}
-console.log(`Merged intervals: ${result}`)
-//Output: [[1,6]]
-//Explanation: Since all the given intervals overlap, we merged them into one.
-````
-#### OR 
-````js
-function merge(intervals) {
-  if(intervals.length < 2) return intervals
-  
-  //sort
-  intervals.sort((a,b) => a[0]-b[0])
-  
-  for(let i = 1; i < intervals.length; i++) {
-    let current = intervals[i]
-    let previous = intervals[i-1]
-    
-    if(current[0] <= previous[1]) {
-      intervals[i] = [previous[0], Math.max(previous[1], current[1])]
-      intervals.splice(i-1, 1)
-      i--
-    }
-  }
-  
-  return intervals
-}
-
-merge([[1,4], [2,5], [7,9]])//[[1,5], [7,9]], Since the first two intervals [1,4] and [2,5] overlap, we merged them into one [1,5].
-merge([[6,7], [2,4], [5,9]])//[[2,4], [5,9]], Since the intervals [6,7] and [5,9] overlap, we merged them into one [5,9].
-merge([[1,4], [2,6], [3,5]])//[[1,6]], Since all the given intervals overlap, we merged them into one.
-merge([[2,5]])
 ````
 
 - The time complexity of the above algorithm is `O(N * logN)`, where `N` is the total number of intervals. We are iterating the intervals only once which will take `O(N)`, in the beginning though, since we need to sort the intervals, our algorithm will take `O(N * logN)`.
